@@ -35,9 +35,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp( 
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.LOGIN,
+      initialRoute: Routes.WELCOME,
       getPages: AppPages.routes,
-      initialBinding: LoginBinding(), 
     );
   }
 }

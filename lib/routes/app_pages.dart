@@ -7,6 +7,7 @@ import 'package:foodie/app/modules/profile/profile_binding.dart';
 import 'package:foodie/app/modules/profile/profile_view.dart';
 import 'package:foodie/app/modules/signup/signup_binding.dart';
 import 'package:foodie/app/modules/signup/signup_view.dart';
+import 'package:foodie/app/modules/welcomescreen/welcomescreen_view.dart';
 import 'package:get/get.dart';
 
 part 'app_routes.dart';
@@ -43,6 +44,10 @@ class AppPages {
       binding: SignUpBinding(),
       name: _Paths.SIGNUP,
       page: () => SignUpView(),
+    ),
+    GetPage(
+      name: _Paths.WELCOME,
+      page: () => WelcomeScreen(),
     ),
   ];
 }

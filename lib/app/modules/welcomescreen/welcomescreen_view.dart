@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:foodie/routes/app_pages.dart'; 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
+
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -68,7 +71,9 @@ class WelcomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(Routes.LOGIN);
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: Color(0xff469110),
@@ -89,7 +94,9 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(Routes.SIGNUP);
+                      },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
                       ),
