@@ -21,11 +21,10 @@
 ---
 
 ## Cara Penggunaan 💡
-1. Clone repository ini ke komputer atau laptop kamu.
-2. Buka folder proyek menggunakan code editor seperti VSCode.
+1. Clone repository ini ke PC/laptop kamu.
+2. Buka folder proyek menggunakan code editor.
 3. Jalankan aplikasi menggunakan emulator atau device langsung.
 4. Login atau daftar akun baru.
 5. Jelajahi berbagai resep yang ada atau langsung unggah resep kreasi kamu.
-6. Kelola resep di halaman profil sesuai kebutuhan.
 
 --
