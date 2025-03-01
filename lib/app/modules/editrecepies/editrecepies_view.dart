@@ -43,11 +43,39 @@ class _EditRecepiesViewState extends State<EditRecepiesView> {
           .collection('recipes')
           .doc(widget.recipeid)
           .update(recipeData!);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Recipe updated successfully!')),
-      );
-      Navigator.pushNamed(context, '/myrecipe');
+      showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.of(context).pop(true);
+          Navigator.pushNamed(context, '/myrecipe');
+        });
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 40),
+                Icon(Icons.check_circle, color: Colors.green, size: 80),
+                SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    'Recipe updated successfully!',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 30),
+              ],
+            ),
+          ),
+        );
+      },
+    );
     }
   }
 
@@ -55,8 +83,9 @@ class _EditRecepiesViewState extends State<EditRecepiesView> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: const Text('Are you sure you want to delete this recipe?'),
+
+        title: Text('Confirm Delete', style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.w500),),
+        content: Text('Are you sure you want to delete this recipe?', style: GoogleFonts.poppins(fontSize: 14),),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

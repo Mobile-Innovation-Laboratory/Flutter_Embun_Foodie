@@ -45,12 +45,7 @@ class _DetailRecepiesViewState extends State<DetailRecepiesView> {
           onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.chevron_left, size: 33),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Iconsax.heart),
-          )
-        ],
+        
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
