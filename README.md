@@ -1,5 +1,6 @@
 # Foodie 🍽️
-
+![Foodie1](./assets/images/Foodie1.png)
+![Foodie2](./assets/images/Foodie2.png)
 ## Deskripsi
 **Foodie** adalah aplikasi mobile yang dirancang khusus untuk para pecinta kuliner. Dengan aplikasi ini, pengguna bisa menjelajahi berbagai resep makanan lezat, membagikan kreasi resep pribadi, hingga mengelola profil kuliner mereka sendiri.  
 **Foodie** bukan sekadar aplikasi resep, tapi juga komunitas berbagi inspirasi di dapur! ✨
