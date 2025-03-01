@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:foodie/app/modules/dashboard/dashboard_view.dart';
@@ -29,6 +30,8 @@ class _AddRecipePageState extends State<NewRecipeView> {
   final ScrollController _ingredientsScrollController = ScrollController();
   final ScrollController _instructionsScrollController = ScrollController();
   //jangan lupa buat exception
+
+  
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
@@ -43,7 +46,7 @@ class _AddRecipePageState extends State<NewRecipeView> {
     _instructionsScrollController.dispose();
     super.dispose();
   }
-  //overflowed 74 pixel
+  //masih overflowed 74 pixel
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,7 +93,7 @@ class _AddRecipePageState extends State<NewRecipeView> {
                 value: _selectedCategory,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12), // Membulatkan kotak
+                    borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide(color: Color(0xff469110), width: 1), 
                   ),
                   enabledBorder: OutlineInputBorder(
@@ -103,14 +106,14 @@ class _AddRecipePageState extends State<NewRecipeView> {
                   ),
                 ),
                 style: GoogleFonts.poppins(fontSize: 16, color: Colors.black),
-                dropdownColor: Colors.white, // Warna latar dropdown agar kontras
-                hint: Text("Select a category", style: GoogleFonts.poppins(fontSize: 16, color: Colors.black54)), // Hint jika belum dipilih
+                dropdownColor: Colors.white,
+                hint: Text("Select a category", style: GoogleFonts.poppins(fontSize: 16, color: Colors.black54)), 
                 items: ["Rice Dishes", "Snacks", "Drinks", "Sweets", "Chicken & Duck"]
                     .map((category) => DropdownMenuItem(
                           value: category,
                           child: Text(
                             category,
-                            style: GoogleFonts.poppins(fontSize: 14, color: Colors.black), // Pastikan teks terlihat
+                            style: GoogleFonts.poppins(fontSize: 14, color: Colors.black), 
                           ),
                         ))
                     .toList(),
@@ -178,10 +181,10 @@ class _AddRecipePageState extends State<NewRecipeView> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.09), // Adjust opacity as needed
-              spreadRadius: 8, // Adjust spread radius as needed
-              blurRadius: 8, // Adjust blur radius as needed
-              offset: const Offset(0, -3), // Move shadow upwards (negative y value)
+              color: Colors.black.withOpacity(0.09), 
+              spreadRadius: 8, 
+              blurRadius: 8,
+              offset: const Offset(0, -3), 
             ),
           ],
         ),
@@ -194,11 +197,11 @@ class _AddRecipePageState extends State<NewRecipeView> {
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.white,
-            selectedItemColor: Colors.white, // Icon yang dipilih jadi putih
-            unselectedItemColor: Colors.grey, // Icon yang tidak dipilih tetap abu-abu
+            selectedItemColor: Colors.white,
+            unselectedItemColor: Colors.grey, 
             showSelectedLabels: false,
             showUnselectedLabels: false,
-            currentIndex: _selectedIndex, // Menentukan item yang aktif
+            currentIndex: _selectedIndex,
             onTap: (index) {
               setState(() => _selectedIndex = index);
               switch (index) {
@@ -233,10 +236,10 @@ BottomNavigationBarItem _buildNavItem(IconData icon, int index) {
     icon: Container(
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: _selectedIndex == index ? Color(0xff469110) : Colors.transparent, // Hijau jika dipilih
-        borderRadius: BorderRadius.circular(10), // Biar kotaknya rounded
+        color: _selectedIndex == index ? Color(0xff469110) : Colors.transparent,
+        borderRadius: BorderRadius.circular(10), 
       ),
-      child: Icon(icon, color: _selectedIndex == index ? Colors.white : Colors.grey), // Putih jika dipilih
+      child: Icon(icon, color: _selectedIndex == index ? Colors.white : Colors.grey), 
     ),
   );
 }
@@ -262,7 +265,7 @@ BottomNavigationBarItem _buildNavItem(IconData icon, int index) {
 
   Widget _buildScrollableTextField(TextEditingController controller, ScrollController scrollController, String hint) {
     return Container(
-      constraints: BoxConstraints(maxHeight: 120, minHeight: 120), // Batasi tinggi agar bisa scroll
+      constraints: BoxConstraints(maxHeight: 120, minHeight: 120), 
       decoration: BoxDecoration(
         color: Color(0xffEFFCE7),
         borderRadius: BorderRadius.circular(10),
@@ -270,15 +273,14 @@ BottomNavigationBarItem _buildNavItem(IconData icon, int index) {
       child: SingleChildScrollView(
         controller: scrollController,
         child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: 50), // Pastikan tetap terlihat
+          constraints: BoxConstraints(minHeight: 50), 
           child: TextField(
             controller: controller,
-            maxLines: null, // Multiline
+            maxLines: null, 
             keyboardType: TextInputType.multiline,
             textInputAction: TextInputAction.newline,
             decoration: _inputDecoration(hint),
             onChanged: (value) {
-              // Auto-scroll ke bawah saat user mengetik
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (scrollController.hasClients) {
                   scrollController.jumpTo(scrollController.position.maxScrollExtent);
@@ -308,6 +310,13 @@ BottomNavigationBarItem _buildNavItem(IconData icon, int index) {
     );
   }
   Future<void> _sendRecipe() async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('You need to be logged in to add a recipe!')),
+    );
+    return;
+  }
   try {
     final newRecipe = {
       'name': _dishNameController.text,
@@ -317,7 +326,7 @@ BottomNavigationBarItem _buildNavItem(IconData icon, int index) {
       'category': _selectedCategory,
       'image': '',
       'howtocook': _instructionsController.text,
-      'userid': 'user456',
+      'userid': user.uid,
       'createdAt': Timestamp.now(),
     };
 
@@ -345,8 +354,38 @@ BottomNavigationBarItem _buildNavItem(IconData icon, int index) {
     final db = FirebaseFirestore.instance;
     await db.collection('recipes').add(newRecipe);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Recipe uploaded successfully!')),
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.of(context).pop(true);
+          Navigator.pushNamed(context, '/myrecipe');
+        });
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 40),
+                Icon(Icons.check_circle, color: Colors.green, size: 80),
+                SizedBox(height: 10),
+                Center(
+                  child: Text(
+                    'Recipe uploaded successfully!',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 30),
+              ],
+            ),
+          ),
+        );
+      },
     );
   } catch (e) {
     print('Failed to upload recipe: $e');
@@ -355,7 +394,5 @@ BottomNavigationBarItem _buildNavItem(IconData icon, int index) {
     );
   }
 }
-
-
 
 }

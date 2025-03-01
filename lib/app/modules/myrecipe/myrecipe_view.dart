@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:foodie/app/modules/dashboard/dashboard_view.dart';
@@ -34,7 +36,7 @@ class MyrecipeView extends StatelessWidget {
         child: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('recipes')
-              .where('userId', isEqualTo: currentUserId)
+              .where('userid', isEqualTo: currentUserId)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,21 +54,19 @@ class MyrecipeView extends StatelessWidget {
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
               childAspectRatio: 0.58,
-              children: recipes.map((recipe) {
+              children: recipes.map<Widget>((recipe) {
                 var item = recipe.data() as Map<String, dynamic>;
 
                 return GestureDetector(
                   onTap: () {
-                    Get.to(() => EditRecepiesView(
-                          productName: item['name'],
-                          productImage: item['image'],
-                          productPrice: item['price'],
-                          productDescription: item['description'],
-                          ingredients: item['ingredients'],
-                          howToCook: item['howtocook'],
-                          category: item['category'],
-                          username: item['userName'],
-                        ));
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context)=> EditRecepiesView(
+                          recipeid: recipe.id, // Hanya mengirim ID resep
+                        )
+                      ),
+                    );
                   },
                   child: Container(
                     width: 160,
@@ -89,12 +89,18 @@ class MyrecipeView extends StatelessWidget {
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12),
                           ),
-                          child: Image.network(
-                            item['image'],
-                            height: 160,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
+                          child: item['image'] != null
+                          ? Image.memory(
+                              base64Decode(item['image']),
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              height: 200,
+                              color: Colors.grey,
+                              child: const Icon(Icons.image, color: Colors.white),
+                            ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12),
@@ -107,6 +113,7 @@ class MyrecipeView extends StatelessWidget {
                                   fontWeight: FontWeight.w600,
                                   fontSize: 13.88,
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 item['price'] ?? '',
@@ -117,43 +124,7 @@ class MyrecipeView extends StatelessWidget {
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          FirebaseFirestore.instance
-                                              .collection('recipes')
-                                              .doc(recipe.id)
-                                              .delete();
-                                        },
-                                        icon: const Icon(Icons.delete, color: Colors.red, size: 20),
-                                        constraints: const BoxConstraints(minWidth: 0, minHeight: 30),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          Get.to(() => EditRecepiesView(
-                                                productName: item['name'],
-                                                productImage: item['image'],
-                                                productPrice: item['price'],
-                                                productDescription: item['description'],
-                                                ingredients: item['ingredients'],
-                                                howToCook: item['howtocook'],
-                                                category: item['category'],
-                                                username: item['userName'],
-                                              ));
-                                        },
-                                        icon: const Icon(Icons.edit, color: Color(0xff292D32), size: 20),
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                              
                             ],
                           ),
                         ),

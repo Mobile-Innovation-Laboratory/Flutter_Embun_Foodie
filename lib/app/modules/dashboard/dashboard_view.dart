@@ -43,7 +43,7 @@ class DashboardView extends StatelessWidget {
                       children: [
                   SizedBox(height: 60),
                   Text(
-                    "Hi, Embun",
+                    "Hi, Embun👋",
                     style: GoogleFonts.poppins(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -172,7 +172,23 @@ class DashboardView extends StatelessWidget {
                     children: products.map<Widget>((product) {
                       var data = product.data() as Map<String, dynamic>;
                       return GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailRecepiesView(
+                                productName: data['name'],
+                                productImage: data['image'],
+                                productPrice: data['price'],
+                                productDescription: data['description'],
+                                ingredients: List<String>.from(data['ingredients'] ?? []),
+                                howToCook: data['howToCook'] ?? '',
+                                category: data['category'] ?? '',
+                                userid: data['userid'] ?? '', 
+                              ),
+                            ),
+                          );
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
@@ -213,32 +229,32 @@ class DashboardView extends StatelessWidget {
                                   children: [
                                     Text(
                                       data['name'],
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13.88,
+                                      style: GoogleFonts.poppins(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 4),
                                     Row(
                                       children: [
-                                        Icon(Icons.access_time, size: 17, color: Color(0xFF00623B)), 
-                                        SizedBox(width: 5), 
+                                        const Icon(Icons.access_time, size: 14, color: Color(0xFF00623B)),
+                                        const SizedBox(width: 5),
                                         Text(
                                           data['price'],
                                           style: GoogleFonts.poppins(
-                                            color: Color(0xFF00623B),
+                                            color: const Color(0xFF00623B),
                                             fontWeight: FontWeight.normal,
-                                            fontSize: 17,
+                                            fontSize: 14,
                                           ),
                                         ),
-                                        SizedBox(width: 5), 
+                                        const SizedBox(width: 2),
                                         Text(
                                           ' min',
                                           style: GoogleFonts.poppins(
-                                            color: Color(0xFF00623B),
+                                            color: const Color(0xFF00623B),
                                             fontWeight: FontWeight.normal,
-                                            fontSize: 17,
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ],
@@ -250,6 +266,7 @@ class DashboardView extends StatelessWidget {
                           ),
                         ),
                       );
+
                     }).toList(),
                   );
                 },
@@ -268,10 +285,10 @@ class DashboardView extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.09), // Adjust opacity as needed
-              spreadRadius: 8, // Adjust spread radius as needed
-              blurRadius: 8, // Adjust blur radius as needed
-              offset: const Offset(0, -3), // Move shadow upwards (negative y value)
+              color: Colors.black.withOpacity(0.09), 
+              spreadRadius: 8, 
+              blurRadius: 8, 
+              offset: const Offset(0, -3), 
             ),
           ],
         ),

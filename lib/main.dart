@@ -9,7 +9,6 @@ import 'package:foodie/app/modules/profile/profile_view.dart';
 import 'package:foodie/app/modules/signup/signup_binding.dart';
 import 'package:foodie/app/modules/signup/signup_view.dart';
 import 'package:foodie/app/modules/welcomescreen/welcomescreen_view.dart';
-import 'package:foodie/dummydata.dart';
 import 'package:get/get.dart';
 import 'package:foodie/routes/app_pages.dart';
 import 'package:hive/hive.dart';
@@ -35,8 +34,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp( 
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.WELCOME,
+      initialRoute: Routes.LOGIN,
       getPages: AppPages.routes,
+      initialBinding: LoginBinding(),
     );
   }
 }

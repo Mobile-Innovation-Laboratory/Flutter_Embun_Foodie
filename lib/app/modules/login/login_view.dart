@@ -15,18 +15,24 @@ class LoginView extends GetView<LoginController> {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
-              const SizedBox(height: 80),
+              const SizedBox(height: 90),
               Text(
                 "foodie",
                 style: GoogleFonts.poppins(
-                  fontSize: 28,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 24),
-              Lottie.asset('assets/lottie/lottielogin.json'),
-              const SizedBox(height: 20),
+              const SizedBox(height: 35),
+              Center(
+                child: Lottie.asset(
+                  'assets/lottie/lottielogin.json',
+                  width: 200, 
+                  height: 200, 
+                ),
+              ),
+              const SizedBox(height: 26),
               Container(
                 padding: const EdgeInsets.all(28),
                 decoration: const BoxDecoration(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -102,12 +103,13 @@ class _DetailRecepiesViewState extends State<DetailRecepiesView> {
                       ],
                     ),
                     SizedBox(height: 5),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            Icon(Iconsax.discount_shape, color: Color(0xff469110),size: 14,),
+                            Icon(Iconsax.discount_shape, color: Color(0xff469110), size: 14),
                             SizedBox(width: 5),
                             Text(
                               widget.productPrice,
@@ -117,10 +119,41 @@ class _DetailRecepiesViewState extends State<DetailRecepiesView> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            const SizedBox(width: 2),
+                                        Text(
+                                          ' min',
+                                          style: GoogleFonts.poppins(
+                                            color: const Color(0xFF00623B),
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                              ],
+                            ),
+                            FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                              future: FirebaseFirestore.instance.collection('users').doc(widget.userid).get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return Text('Loading...', style: GoogleFonts.poppins(fontSize: 14));
+                                }
+                                if (!snapshot.hasData || snapshot.data == null) {
+                                  return Text('Unknown User', style: GoogleFonts.poppins(fontSize: 14));
+                                }
+                                final userData = snapshot.data!.data();
+                                return Text(
+                                  userData?['fullname'] ?? 'Unknown User',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey,
+                                  ),
+                                );
+                              },
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+
+
                     SizedBox(height: 10),
                     Text(
                       widget.productDescription,
@@ -158,23 +191,27 @@ class _DetailRecepiesViewState extends State<DetailRecepiesView> {
             ),
             SizedBox(height: 20),
             Text(
-              'How to Cook',
-              style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              elevation: 2,
-              child: Padding(
-                padding: EdgeInsets.all(22),
-                child: Text(widget.howToCook, textAlign: TextAlign.justify),
-              ),
-            ),
+      'How to Cook',
+      style: GoogleFonts.poppins(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    SizedBox(height: 10),
+    Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 2,
+      child: Padding(
+        padding: EdgeInsets.all(22),
+        child: Text(
+          widget.howToCook,
+          textAlign: TextAlign.justify,
+          style: GoogleFonts.poppins(fontSize: 14),
+        ),
+      ),
+    ),
             SizedBox(height: 20),
             Text(
               'Category',

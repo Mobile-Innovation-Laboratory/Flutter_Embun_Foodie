@@ -17,7 +17,7 @@ class LoginController extends GetxController {
       sessionBox.put('userId', userCredential.user?.uid);
       sessionBox.put('email', email.value);
 
-      Get.offNamed('/newrecipe');
+      Get.offNamed('/dashboard');
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }

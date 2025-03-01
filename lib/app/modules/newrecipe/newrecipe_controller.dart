@@ -9,6 +9,7 @@ Future<void> uploadRecipe(
     required String price,
     required String category,
     required File? image,
+    required String userid,
     required String instructions}) async {
   try {
     String? imageUrl;
@@ -20,9 +21,6 @@ Future<void> uploadRecipe(
       imageUrl = await storageRef.getDownloadURL();
     }
 
-    // UserId sementara
-    String tempUserId = "dummyUserId123";
-
     // Tambahkan data ke Firestore
     await FirebaseFirestore.instance.collection('recipes').add({
       'name': dishName,
@@ -31,7 +29,7 @@ Future<void> uploadRecipe(
       'category': category,
       'image': imageUrl ?? '',
       'instructions': instructions,
-      'userId': tempUserId,
+      'userId': userid,
       'createdAt': Timestamp.now(),
     });
 
